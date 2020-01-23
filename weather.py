@@ -8,6 +8,10 @@ req.encoding = 'utf-8'
 html = req.text
 html1 = BeautifulSoup(html,'lxml')
 html2 = html1.find('div', class_='todayModel weatherBg01')
+db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='asd', port=3306, charset='utf8')
+cursor = db.cursor()
+zhcn = """alter table red convert to character set utf8;"""
+cursor.execute(zhcn)
 def get_source(html):
     html1 = BeautifulSoup(html, 'lxml')
     soup = html1.find('div', class_='todayModel weatherBg01')
