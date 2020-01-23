@@ -1,16 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
 import pymysql
-import turtle
+import time
 mainURL = 'http://forecast.weather.com.cn/town/weather1dn/101161107002.shtml'
 req = requests.get(url = mainURL)
 req.encoding = 'utf-8'
 html = req.text
 html1 = BeautifulSoup(html,'lxml')
 html2 = html1.find('div', class_='todayModel weatherBg01')
-db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='asd', port=3306, charset='utf8')
+db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='weather_info', port=3306, charset='utf8')
 cursor = db.cursor()
-zhcn = """alter table red convert to character set utf8;"""
+zhcn = """alter table info convert to character set utf8;"""
 cursor.execute(zhcn)
 def get_source(html):
     html1 = BeautifulSoup(html, 'lxml')
@@ -22,7 +22,13 @@ def get_source(html):
     #warning(soup)
     wind(soup)
     limit_line(soup)
-    weatherALL(soup)
+    #weatherALL(soup)
+    Time()
+    sql = "INSERT INTO info(id ,Tempurater,Weather,MaxTempurater,MinTempurater,Wind,Limit_line,Datetime) " \
+          "VALUES(null ,'{}','{}','{}','{}','{}','{}','{}')"
+    sql2 = sql.format((Temp(soup)), (weather(soup)), (maxTemp(soup)), (maxTemp(soup)), (wind(soup)), (limit_line(soup)), (Time()))
+    cursor.execute(sql2)
+    db.commit()
 def Temp(soup):
     list = soup.find('div', class_='tempDiv')
     content = list.text.replace("\n", "")
@@ -69,5 +75,9 @@ def weatherALL(soup):
         content1 = content.format((time),(weather),(wind),(windL))
         print(content1)
         return content1
+def Time():
+    Time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    print(Time)
+    return  Time
 if __name__ == '__main__':
     get_source(html)
