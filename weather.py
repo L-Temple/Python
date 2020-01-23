@@ -26,7 +26,7 @@ def get_source(html):
     Time()
     sql = "INSERT INTO info(id ,Tempurater,Weather,MaxTempurater,MinTempurater,Wind,Limit_line,Datetime) " \
           "VALUES(null ,'{}','{}','{}','{}','{}','{}','{}')"
-    sql2 = sql.format((Temp(soup)), (weather(soup)), (maxTemp(soup)), (maxTemp(soup)), (wind(soup)), (limit_line(soup)), (Time()))
+    sql2 = sql.format((Temp(soup)), (weather(soup)), (maxTemp(soup)), (minTemp(soup)), (wind(soup)), (limit_line(soup)), (Time()))
     cursor.execute(sql2)
     db.commit()
 def Temp(soup):
@@ -81,3 +81,4 @@ def Time():
     return  Time
 if __name__ == '__main__':
     get_source(html)
+    time.sleep(10)
