@@ -14,7 +14,7 @@ zhcn = """alter table info convert to character set utf8;"""
 cursor.execute(zhcn)
 def get_source(html):
     html1 = BeautifulSoup(html, 'lxml')
-    soup = html1.find('div', class_='todayModel weatherBg01')
+    soup = html1.find('div', class_='L_weather')
     Temp(soup)
     weather(soup)
     maxTemp(soup)
@@ -81,4 +81,3 @@ def Time():
     return  Time
 if __name__ == '__main__':
     get_source(html)
-    time.sleep(10)
