@@ -77,12 +77,12 @@ def save_to_excel(soup):
 def get_source():
     WAIT.until(EC.presence_of_element_located((By.CSS_SELECTOR,'#server-search-app > div.contain > div.body-contain > div > div.flow-loader> div.mixin-list> ul')))
     html = browser.page_source
-    soup = BeautifulSoup(html,'lxml')
+    soup = BeautifulSoup(html, 'lxml')
     save_to_excel(soup)
 def get_sources():
     WAIT.until(EC.presence_of_element_located((By.CSS_SELECTOR,'#server-search-app > div.contain > div.body-contain > div > div.flow-loader> ul')))
     html = browser.page_source
-    soup = BeautifulSoup(html,'lxml')
+    soup = BeautifulSoup(html, 'lxml')
     save_to_excel(soup)
 def main():
     try:
