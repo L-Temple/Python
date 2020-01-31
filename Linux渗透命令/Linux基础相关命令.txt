@@ -1,6 +1,43 @@
 查看本机ip地址:ifconfig
+开启某项服务:service [服务] start/stop
+在Linux上，端口的使用是有一定的规范：
+  1.端口号 0 不使用；
+  2.端口号 1 - 1023，系统默认只给root使用；
+  3.端口号 1024 - 4999 由客户端程序自由分配；
+  4.端口号 5000 - 65535 由服务器端程序自由分配
+端口查看:netstat -nap | grep LISTEN
+端口及对应服务: 参考链接:http://blog.sina.com.cn/s/blog_696a921c010197lq.html
+  端口：21 服务：FTP
+  端口：22 服务：ssh
+  端口：23 服务：telnet
+  端口：25 服务：SMTP
+  端口：80 服务：http
+  端口：113 服务：Authentication Service #验证服务 用于鉴别TCP连接的用户
+  端口：135 服务：Location Service #位置服务 有些DOS攻击直接针对这个端口
+  端口：137,138 服务：NETBIOS Name Service #UDP端口 通过网上邻居传输文件时用这个端口
+  端口：139 服务：NETBIOS Name Service #通过这个端口进入的连接试图获得NetBIOS/SMB服务,这个协议被用于windows文件和打印机共享和SAMBA
+  端口：161 服务：SNMP #SNMP允许远程管理设备,所有配置和运行信息的储存在数据库中,通过SNMP可获得这些信息。
+  端口：443 服务：https
+  端口：1024 服务：Reserved #动态端口的开始
+  端口：8080 服务：代理端口 #WWW代理开放此端口
+linux渗透方式
+  1、扫描端口，通过已知的系统Bug攻入主机。
+  2、种植木马，利用木马开辟的后门进入主机。
+  3、采用数据溢出的手段，迫使主机提供后门进入主机。
+  4、利用某些软件设计的漏洞，直接或间接控制主机。
 网络扫描和嗅探:nmap -[指令] [ip]
-常用"nmap -sP [ip]"指令快速查询网段下的存活主机
-也可以用"nmap [指定一个ip]"来获取该主机端口开放情况
-获取远程主机的系统类型及开放端口:nmap -sS -P0 -sV -O <target>
+  1.常用"nmap -sP [ip]"指令快速查询网段下的存活主机 例:nmap -sP 192.168.1.1-254或nmap -sP 192.168.1.0/24
+  2.也可以用"nmap [指定一个ip]"来获取该主机端口开放情况
+  3.获取远程主机的系统类型及开放端口:nmap -sS -P0 -sV -O [ip]
+    -sS TCP SYN 扫描 (又称半开放,或隐身扫描)
+    -P0 允许你关闭 ICMP pings
+    -sV 打开系统版本检测
+    -O 尝试识别远程操作系统
+    -A 同时打开操作系统指纹和版本检测
+    -v 详细输出扫描情况
+   4.列出开放了指定端口的主机列表:nmap -sT -p [port] -oG [ip] | grep open
+   5.在某段子网上查找未占用的 IP :nmap -T4 -sP 192.168.2.0/24 && egrep “00:00:00:00:00:00″ /proc/net/arp #有待验证
+   6.使用诱饵扫描方法来扫描主机端口:sudo nmap -sS [目标主机] -D [诱饵主机]
 监视第一个网络接口上所有流过的数据包:tcpdump
+监视某个主机收到和发出的逐级报:tcpdump host [ip]
+截获主机发送的所有数据:tcpdump -i eth0 src host [ip]
