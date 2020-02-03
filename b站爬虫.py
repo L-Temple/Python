@@ -1,3 +1,4 @@
+#爬取b站某搜索结果下的内容 并存进数据库
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By

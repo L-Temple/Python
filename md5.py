@@ -1,3 +1,4 @@
+#md5码运算
 import hashlib
 mw = input('flag=')
 m = hashlib.md5(str(mw).encode(encoding='utf-8')).hexdigest()

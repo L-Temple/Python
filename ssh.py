@@ -1,3 +1,4 @@
+#远程ssh连接某主机
 import paramiko
 ssh = paramiko.SSHClient()  # 创建SSH对象
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # 允许连接不在know_hosts文件中的主机

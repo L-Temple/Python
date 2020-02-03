@@ -1,3 +1,4 @@
+#爬取中国天气网上面的本地本日数据
 import requests
 from bs4 import BeautifulSoup
 import pymysql
