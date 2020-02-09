@@ -19,31 +19,33 @@ def main():
     soup4 = soup3.replace('[', '')
     soup5 = soup4.replace(']', '')
     soup6 = soup5.replace('}', '')
-    soup7 = re.search('\d{3,10}',soup6).group() #全国确诊
+    soup7 = re.search('\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}', soup6).group() #时间
     soup8 = soup6.replace(soup7, '')
-    soup9 = re.search('\d{3,10}',soup8).group() #疑似病例
+    soup9 = re.search('\d{3,10}',soup8).group() #全国确诊
     soup10 = soup8.replace(soup9, '')
-    soup11 = re.search('\d{3,10}',soup10).group() #死亡人数
+    soup11 = re.search('\d{3,10}',soup10).group() #疑似病例
     soup12 = soup10.replace(soup11, '')
-    soup13 = re.search('\d{3,10}',soup12).group() #治愈人数
-    soup14 = re.search('\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}', soup12).group() #时间\
-    AllPeople = int(soup7)+int(soup9)
-    DeadRate = (int(soup11)/AllPeople)*100
-    HealRate = (int(soup13)/AllPeople)*100
-    print('全国确诊:'+soup7)
-    print('疑似病例:'+soup9)
-    print('死亡人数:'+soup11)
-    print('治愈人数:'+soup13)
-    print('截至:'+soup14)
+    soup13 = re.search('\d{3,10}',soup12).group() #死亡人数
+    soup14 = soup12.replace(soup13, '')
+    soup15 = re.search('\d{3,10}',soup14).group() #治愈人数
+    AllPeople = int(soup9)+int(soup11)
+    DeadRate = (int(soup13)/AllPeople)*100
+    HealRate = (int(soup15)/AllPeople)*100
+    print('全国确诊:'+soup9)
+    print('疑似病例:'+soup11)
+    print('死亡人数:'+soup13)
+    print('治愈人数:'+soup15)
+    print('截至:'+soup7)
     print("死亡率:%.2f%%" % DeadRate)
     print("治愈率:%.2f%%" % HealRate)
     sql = "INSERT INTO content(id,全国确诊,疑似病例,治愈人数,死亡人数,时间) " \
           "VALUES(null,'{}','{}','{}','{}','{}')"
-    sql2 = sql.format((soup7), (soup9), (soup13), (soup11),('截至 '+soup14))
+    sql2 = sql.format((soup9), (soup11), (soup15), (soup13),('截至 '+soup7))
     cursor.execute(sql2)
     db.commit()
     t = soup.text
-    last = t[::-1].replace('{', '')
+    lasts = re.search('[a-zA-z]{.*?}[a-zA-z]', t).group()
+    last = lasts[::-1].replace('{', '')
     last1 =last.replace('"', '')
     last2 =last1.replace('\\', '')
     last3 = last2.replace('[', '')
@@ -62,10 +64,10 @@ def main():
     last10 = re.search('\d{2,7}',last9).group() #疑似病例
     last11 = last9.replace(last10, '')
     last12 = re.search('\d{2,7}',last11).group() #全国确诊
-    print('昨天相比前天增加治愈人数:'+last6[::-1])
-    print('昨天相比前天增加死亡人数:'+last8[::-1])
-    print('昨天相比前天增加疑似病例:'+last10[::-1])
-    print('昨天相比前天增加全国确诊:'+last12[::-1])
+    print('昨天全国确诊:' + last12[::-1])
+    print('昨天疑似病例:' + last10[::-1])
+    print('昨天死亡人数:' + last8[::-1])
+    print('昨天治愈人数:'+last6[::-1])
     print('昨天时间:'+l_Date[::-1])
 if __name__ == '__main__':
     main()
