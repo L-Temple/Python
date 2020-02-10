@@ -38,11 +38,11 @@ def main():
     print('截至:'+soup7)
     print("死亡率:%.2f%%" % DeadRate)
     print("治愈率:%.2f%%" % HealRate)
-    sql = "INSERT INTO content(id,全国确诊,疑似病例,治愈人数,死亡人数,时间) " \
-          "VALUES(null,'{}','{}','{}','{}','{}')"
-    sql2 = sql.format((soup9), (soup11), (soup15), (soup13),('截至 '+soup7))
-    cursor.execute(sql2)
-    db.commit()
+    #sql = "INSERT INTO content(id,全国确诊,疑似病例,治愈人数,死亡人数,时间) " \
+    #      "VALUES(null,'{}','{}','{}','{}','{}')"
+    #sql2 = sql.format((soup9), (soup11), (soup15), (soup13),('截至 '+soup7))
+    #cursor.execute(sql2)
+    #db.commit()
     t = soup.text
     lasts = re.search('[a-zA-z]{.*?}[a-zA-z]', t).group()
     last = lasts[::-1].replace('{', '')
@@ -64,10 +64,24 @@ def main():
     last10 = re.search('\d{2,7}',last9).group() #疑似病例
     last11 = last9.replace(last10, '')
     last12 = re.search('\d{2,7}',last11).group() #全国确诊
-    print('昨天全国确诊:' + last12[::-1])
-    print('昨天疑似病例:' + last10[::-1])
-    print('昨天死亡人数:' + last8[::-1])
-    print('昨天治愈人数:'+last6[::-1])
+    lastss = last11.replace(last12, '')
+    lDate = re.search('\d{2}.\d{2}', lastss).group() #时间
+    lDates = last11.replace(lDate, '')
+    lHealsRate = re.search('\d{1,2}.\d{1,2}', lDates).group()
+    lHealsRates = lDates.replace(lHealsRate, '')
+    lDeadRate = re.search('\d{1,2}.\d{1,2}', lHealsRates).group()
+    lDeadRates = lHealsRates.replace(lDeadRate, '')
+    last13 = re.search('\d{2,7}',lDeadRates).group() #治愈人数
+    last14 = lDeadRates.replace(last13, '')
+    last15 = re.search('\d{2,7}',last14).group() #死亡人数
+    last16 = last14.replace(last15, '')
+    last17 = re.search('\d{2,7}',last16).group() #疑似病例
+    last18 = last16.replace(last17, '')
+    last19 = re.search('\d{2,7}',last18).group() #全国确诊
+    print('昨天全国确诊:' + last19[::-1])
+    print('昨天疑似病例:' + last17[::-1])
+    print('昨天死亡人数:' + last15[::-1])
+    print('昨天治愈人数:'+last13[::-1])
     print('昨天时间:'+l_Date[::-1])
 if __name__ == '__main__':
     main()
