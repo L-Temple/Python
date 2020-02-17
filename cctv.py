@@ -3,10 +3,11 @@ from bs4 import BeautifulSoup
 import re
 import datetime
 import time
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
 def video_url(day): #获取当日的所有链接并返回
     mainURL = 'http://tv.cctv.com/lm/wjxw/day/{}.shtml'
     URL = mainURL.format(days)
-    req = requests.get(url=URL)
+    req = requests.get(url=URL, headers=headers)
     req.encoding = 'utf-8'
     html = req.text
     soup = BeautifulSoup(html, 'lxml')
@@ -14,7 +15,7 @@ def video_url(day): #获取当日的所有链接并返回
     return url
 def get_video_uid(listURL): # 获取所提供链接的视频uid并返回
     #listURL = 'http://tv.cctv.com/2019/01/01/VIDE2HsA8GVwiT4lz7HPyNPu190101.shtml?'
-    req = requests.get(url=listURL)
+    req = requests.get(url=listURL, headers=headers)
     req.encoding = 'utf-8'
     html = req.text
     soup = BeautifulSoup(html, 'lxml').text
@@ -24,14 +25,17 @@ def get_video_uid(listURL): # 获取所提供链接的视频uid并返回
 def video(uid): #通过获取的uid取得下载链接并返回
     videoURL = 'http://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid={}'
     URL = videoURL.format(uid)
-    req = requests.get(url=URL)
+    req = requests.get(url=URL, headers=headers)
     req.encoding = 'utf-8'
     html = req.text
     soup = BeautifulSoup(html, 'lxml').text
-    soup1 = re.search('"url":"[a-zA-z]+://[^\s]*', soup).group()
+    soup1 = re.search('[a-zA-z]+://[^\s]*', soup).group()
     soup2 = soup1.replace('}', '\n')
-    soup3 = re.search('[a-zA-z]+://[^\s]*', soup2).group()
-    return soup3
+    soup3 = re.search('"url":"[a-zA-z]+://[^\s]*', soup2).group()
+    title = soup.replace(',', '\n')
+    tirtle = re.search('"title":"\[视频\][\u4e00-\u9fa5]*[^\s]*', title).group()
+    tirtles = tirtle.replace('"title":"', '')
+    return soup3, tirtles
 def main(i,days):
     video_url(day=days)
     uid = get_video_uid(i) # 将遍历的列表赋给获取uid的函数
