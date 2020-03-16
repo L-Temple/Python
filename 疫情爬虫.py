@@ -8,10 +8,10 @@ req = requests.get(url=mainURL)
 #req.encoding = 'utf-8'
 html = req.text
 soup = BeautifulSoup(html, 'lxml')
-db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='pytest', port=3306, charset='utf8')
-cursor = db.cursor()
-zhcn = """alter table content convert to character set utf8;"""
-cursor.execute(zhcn)
+#db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='pytest', port=3306, charset='utf8')
+#cursor = db.cursor()
+#zhcn = """alter table content convert to character set utf8;"""
+#cursor.execute(zhcn)
 def main():
     soup1 = soup.text.replace('{', '')
     soup2 = soup1.replace('"', '')
@@ -38,54 +38,54 @@ def main():
     print('截至:'+soup7)
     print("死亡率:%.2f%%" % DeadRate)
     print("治愈率:%.2f%%" % HealRate)
-    sql = "INSERT INTO content(id,全国确诊,疑似病例,治愈人数,死亡人数,时间) " \
-          "VALUES(null,'{}','{}','{}','{}','{}')"
-    sql2 = sql.format((soup9), (soup11), (soup15), (soup13),('截至 '+soup7))
-    cursor.execute(sql2)
-    db.commit()
-    t = soup.text
-    lasts = re.search('[a-zA-z]{.*?}[a-zA-z]', t).group()
-    last = lasts[::-1].replace('{', '')
-    last1 =last.replace('"', '')
-    last2 =last1.replace('\\', '')
-    last3 = last2.replace('[', '')
-    last4 = last3.replace(']', '')
-    last5 = last4.replace('}', '')
-    l_Date = re.search('\d{2}.\d{2}', last5).group() #时间
-    l_Dates = last5.replace(l_Date, '')
-    l_HealRate = re.search('\d{1,2}.\d{1,2}', l_Dates).group()
-    l_HealsRate = l_Dates.replace(l_HealRate, '')
-    l_DeadRate = re.search('\d{1,2}.\d{1,2}', l_HealsRate).group()
-    l_DeadRates = l_HealsRate.replace(l_DeadRate, '')
-    last6 = re.search('\d{2,7}',l_DeadRates).group() #治愈人数
-    last7 = l_DeadRates.replace(last6, '')
-    last8 = re.search('\d{2,7}',last7).group() #死亡人数
-    last9 = last7.replace(last8, '')
-    last10 = re.search('\d{2,7}',last9).group() #疑似病例
-    last11 = last9.replace(last10, '')
-    last12 = re.search('\d{2,7}',last11).group() #全国确诊
-    lastss = last11.replace(last12, '')
-    lDate = re.search('\d{2}.\d{2}', lastss).group() #时间
-    lDates = last11.replace(lDate, '')
-    lHealsRate = re.search('\d{1,2}.\d{1,2}', lDates).group()
-    lHealsRates = lDates.replace(lHealsRate, '')
-    lDeadRate = re.search('\d{1,2}.\d{1,2}', lHealsRates).group()
-    lDeadRates = lHealsRates.replace(lDeadRate, '')
-    last13 = re.search('\d{2,7}',lDeadRates).group()
-    last14 = lDeadRates.replace(last13, '')
-    last15 = re.search('\d{2,7}',last14).group()
-    last16 = last14.replace(last15, '')
-    last17 = re.search('\d{2,7}',last16).group() #治愈人数
-    last18 = last16.replace(last17, '')
-    last19 = re.search('\d{2,7}',last18).group() #死亡人数
-    last20 = last18.replace(last19, '')
-    last21 = re.search('\d{2,7}',last20).group() #疑似病例
-    last22 = last20.replace(last21, '')
-    last23 = re.search('\d{2,7}',last22).group() #全国确诊
-    print('昨天全国确诊:' + last23[::-1])
-    print('昨天疑似病例:' + last21[::-1])
-    print('昨天死亡人数:' + last19[::-1])
-    print('昨天治愈人数:'+last17[::-1])
-    print('昨天时间:'+l_Date[::-1])
+    #sql = "INSERT INTO content(id,全国确诊,疑似病例,治愈人数,死亡人数,时间) " \
+    #      "VALUES(null,'{}','{}','{}','{}','{}')"
+    #sql2 = sql.format((soup9), (soup11), (soup15), (soup13),('截至 '+soup7))
+    #cursor.execute(sql2)
+    #db.commit()
+    #t = soup.text
+    #lasts = re.search('[a-zA-z]{.*?}[a-zA-z]', t).group()
+    #last = lasts[::-1].replace('{', '')
+    #last1 =last.replace('"', '')
+    #last2 =last1.replace('\\', '')
+    #last3 = last2.replace('[', '')
+    #last4 = last3.replace(']', '')
+    #last5 = last4.replace('}', '')
+    #l_Date = re.search('\d{2}.\d{2}', last5).group() #时间
+    #l_Dates = last5.replace(l_Date, '')
+    #l_HealRate = re.search('\d{1,2}.\d{1,2}', l_Dates).group()
+    #l_HealsRate = l_Dates.replace(l_HealRate, '')
+    #l_DeadRate = re.search('\d{1,2}.\d{1,2}', l_HealsRate).group()
+    #l_DeadRates = l_HealsRate.replace(l_DeadRate, '')
+    #last6 = re.search('\d{2,7}',l_DeadRates).group() #治愈人数
+    #last7 = l_DeadRates.replace(last6, '')
+    #last8 = re.search('\d{2,7}',last7).group() #死亡人数
+    #last9 = last7.replace(last8, '')
+    #last10 = re.search('\d{2,7}',last9).group() #疑似病例
+    #last11 = last9.replace(last10, '')
+    #last12 = re.search('\d{2,7}',last11).group() #全国确诊
+    #lastss = last11.replace(last12, '')
+    #lDate = re.search('\d{2}.\d{2}', lastss).group() #时间
+    #lDates = last11.replace(lDate, '')
+    #lHealsRate = re.search('\d{1,2}.\d{1,2}', lDates).group()
+    #lHealsRates = lDates.replace(lHealsRate, '')
+    #lDeadRate = re.search('\d{1,2}.\d{1,2}', lHealsRates).group()
+    #lDeadRates = lHealsRates.replace(lDeadRate, '')
+    #last13 = re.search('\d{2,7}',lDeadRates).group()
+    #last14 = lDeadRates.replace(last13, '')
+    #last15 = re.search('\d{2,7}',last14).group()
+    #last16 = last14.replace(last15, '')
+    #last17 = re.search('\d{2,7}',last16).group() #治愈人数
+    #last18 = last16.replace(last17, '')
+    #last19 = re.search('\d{2,7}',last18).group() #死亡人数
+    #last20 = last18.replace(last19, '')
+    #last21 = re.search('\d{2,7}',last20).group() #疑似病例
+    #last22 = last20.replace(last21, '')
+    #last23 = re.search('\d{2,7}',last22).group() #全国确诊
+    #print('昨天全国确诊:' + last23[::-1])
+    #print('昨天疑似病例:' + last21[::-1])
+    #print('昨天死亡人数:' + last19[::-1])
+    #print('昨天治愈人数:'+last17[::-1])
+    #print('昨天时间:'+l_Date[::-1])
 if __name__ == '__main__':
     main()
