@@ -3,7 +3,6 @@ from time import sleep
 from sys import argv
 from random import randint
 from blconf import *
-
 def genpwm(point, wait):
     return [
         ['选择舰队', point, 1],
