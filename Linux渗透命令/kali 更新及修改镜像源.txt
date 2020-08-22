@@ -1,0 +1,27 @@
+1、修改sources.list源文件：
+leafpad /etc/apt/sources.list
+复制代码
+#aliyun 阿里云
+deb http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
+# ustc 中科大
+deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
+#deb http://mirrors.ustc.edu.cn/kali-security kali-current/updates main contrib non-free
+#deb-src http://mirrors.ustc.edu.cn/kali-security kali-current/updates main contrib non-free
+# kali 官方源
+deb http://http.kali.org/kali kali-rolling main non-free contrib
+deb-src http://http.kali.org/kali kali-rolling main non-free contrib
+# 默认的，可以注释掉不用管
+#deb http://security.kali.org/kali-security kali-rolling/updates main contrib non-free
+#deb-src http://security.kali.org/kali-security kali-rolling/updates main contrib non-free
+复制代码
+2、更新一下源：
+1 apt-get update
+3、开始更新软件：
+1 ape-get upgrade
+4、更新系统：
+1 apt-get dist-upgrade
+5、清理安装包：
+1 apt-get clean
+2 apt-get autoclean
