@@ -41,3 +41,4 @@ linux渗透方式
 监视第一个网络接口上所有流过的数据包:tcpdump
 监视某个主机收到和发出的数据包:tcpdump host [ip]
 截获主机发送的所有数据:tcpdump -i eth0 src host [ip]
+windows查询端口占用应用PID:netstat -aon|findstr :80|findstr LISTEN
