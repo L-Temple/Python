@@ -159,8 +159,6 @@ Received 2 packets, got 1 answers, remaining 0 packets
 3. 构造 ARP 请求
 #!/usr/bin/env python3
 #-*- coding:UTF-8 -*-
-#欢迎关注微信公众号：点滴技术
-#这里有靠谱、有价值的、免费分享、成长的，专属于网络攻城狮的。
 
 import logging
 
@@ -207,9 +205,6 @@ IP地址: 192.168.8.254 MAC地址: 00:50:56:e7:d0:87
 4. 构造 ARP 扫描
 #!/usr/bin/env python3
 #-*- coding:UTF-8 -*-
-#欢迎关注微信公众号：点滴技术
-#这里有靠谱、有价值的、免费分享、成长的，专属于网络攻城狮的空间
-
 import logging
 logging.getLogger("kamene.runtime").setLevel(logging.ERROR)
 import ipaddress
@@ -259,8 +254,6 @@ IP地址： 192.168.8.254 是活动的，MAC地址是 00:50:56:e7:d0:87
 5. 构造 ARP 欺骗
 #!/usr/bin/env python3
 #-*- coding:UTF-8 -*-
-#欢迎关注微信公众号：点滴技术
-#这里有靠谱、有价值的、免费分享、成长的，属于网络攻城狮的空间
 
 
 import logging
