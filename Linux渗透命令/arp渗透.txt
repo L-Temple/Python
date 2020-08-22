@@ -1,0 +1,158 @@
+1. Scapy简述
+Scapy是一个Python语言编写的工具，也是一个强大的交付式数据包处理程序，能够伪造或者解码大量的网络协议数据包，能够发送、嗅探、剖析和伪造网络数据包，如端口扫描、路由跟踪、探测、攻击或网络发现等。使用Scapy可以替代hping、arpspoof、arp-sk、arping、p0f等功能，甚至可以代替nmap、tcpdump和tshark的部分功能。此外，Scapy还有很多其他工具没有的特性，如发送无效数据帧、注入修改的802.11数据帧、在WEB上解码加密通道(VOIP)、ARP缓存攻击(VLAN)等。
+Scapy的主要功能如下：
+Scanning（扫描）
+Fingerprinting（识别）
+Testing（测试）
+Packet forging（包铸造）
+Attacking（攻击）
+Sniffing（抓包分析）
+收发数据包介绍：
+sr()：发送三层数据包，等待接受一个或者多个数据包的响应。
+sr1( )：发送三层数据包，并仅仅只等待接受一个数据包的响应。
+srp()：发送二层数据包，并且等待响应。
+send()：仅仅发送三层数据包，系统会自动处理路由和二层信息。
+sendp()：发送二层数据包。
+作为网工，你是不是经常抓包来分析某协议头部结构，现在就可以用Scapy来构造发送数据包啦。
+在python3的环境下，现在叫法是 Kamene，之前叫做Scapy。
+2. Scapy简单演示
+2.1 安装
+pip3 install -i https://pypi.douban.com/simple/ kamene	#使用豆瓣源进行安装kamene
+说明：强烈建议在linux环境下安装及测试(我用的是ubuntu 16)。
+2.2 构造包演示
+2.2.1 进入kamene交互界面
+#安装好后，直接通过kamene进入，类似python交互式界面
+root@ubuntu:~# kamene
+WARNING: No route found for IPv6 destination :: (no default route?). This affects only IPv6
+INFO: Please, report issues to https://github.com/phaethon/kamene
+WARNING: IPython not available. Using standard Python shell instead.
+Welcome to kamene (3.0.0)
+>>>
+2.2.2 查看以太网头部
+>>> Ether()
+<Ether  |>
+>>> _.show()	#'_' 下划线表示上一条命令执行的结果，通过show()展示结果
+###[ Ethernet ]###
+WARNING: Mac address to reach destination not found. Using broadcast.
+  dst= ff:ff:ff:ff:ff:ff
+  src= 00:00:00:00:00:00
+  type= 0x9000
+2.2.3 查看 ICMP 头部
+>>> ICMP()
+<ICMP  |>
+>>> _.show()
+###[ ICMP ]###
+  type= echo-request
+  code= 0
+  chksum= None
+  id= 0x0
+  seq= 0x0
+2.2.4 查看 IP 头部
+>>> IP()
+<IP  |>
+>>> _.show()
+###[ IP ]###
+  version= 4
+  ihl= None
+  tos= 0x0
+  len= None
+  id= 1
+  flags=
+  frag= 0
+  ttl= 64
+  proto= ip
+  chksum= None
+  src= 127.0.0.1
+  dst= 127.0.0.1
+  \options\
+2.2.5 查看 TCP/UDP 头部
+>>> TCP()
+<TCP  |>
+>>> _.show()
+###[ TCP ]###
+  sport= ftp_data
+  dport= http
+  seq= 0
+  ack= 0
+  dataofs= None
+  reserved= 0
+  flags= S
+  window= 8192
+  chksum= None
+  urgptr= 0
+  options= {}
+
+>>> UDP()
+<UDP  |>
+>>> _.show()
+###[ UDP ]###
+  sport= domain
+  dport= domain
+  len= None
+  chksum= None
+2.2.6 简单构造 ICMP 包
+#通过 '/' 可叠加多个协议层(左底层到右上层)，如Ether()/IP()/UDP()/DNS()
+>>> p = sr1(IP(src='192.168.8.128' , dst='192.168.8.254')/ICMP()/b'This is a ICMP packet')
+Begin emission:
+..Finished to send 1 packets.
+*
+Received 3 packets, got 1 answers, remaining 0 packets
+>>> p.show()
+###[ IP ]###
+  version= 4
+  ihl= 5
+  tos= 0x0
+  len= 49
+  id= 1909
+  flags=
+  frag= 0
+  ttl= 128
+  proto= icmp
+  chksum= 0xa088
+  src= 192.168.8.254
+  dst= 192.168.8.128
+  \options\
+###[ ICMP ]###
+     type= echo-reply		#收到一个replay包
+     code= 0
+     chksum= 0x55ad
+     id= 0x0
+     seq= 0x0
+###[ Raw ]###
+        load= 'This is a ICMP packet'
+2.2.7 简单 构造 ARP 包
+先看下ARP包的格式：
+
+>>> ARP()
+<ARP  |>
+>>> _.show()
+###[ ARP ]###
+  hwtype= 0x1
+  ptype= 0x800	#协议号
+  hwlen= 6
+  plen= 4
+  op= who-has	#op=1表示Request，op=2表示Response
+  hwsrc= 00:0c:29:5d:2f:55	#源MAC地址
+  psrc= 192.168.8.128	#源IP地址
+  hwdst= 00:00:00:00:00:00	#初始目的为广播地址
+  pdst= 0.0.0.0		#缺省为空
+简单构造 ARP 请求包：
+
+>>> p = sr1(ARP(psrc='192.168.8.128',pdst='192.168.8.254'))
+Begin emission:
+.*Finished to send 1 packets.
+
+Received 2 packets, got 1 answers, remaining 0 packets
+>>> p.show()
+###[ ARP ]###
+  hwtype= 0x1
+  ptype= 0x800
+  hwlen= 6
+  plen= 4
+  op= is-at
+  hwsrc= 00:50:56:e7:d0:87
+  psrc= 192.168.8.254
+  hwdst= 00:0c:29:5d:2f:55	#返回的是arp响应包，获取到目的映射的MAC地址
+  pdst= 192.168.8.128
+###[ Padding ]###
+     load= '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
