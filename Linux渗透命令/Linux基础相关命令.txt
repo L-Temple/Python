@@ -38,6 +38,10 @@ linux渗透方式
    4.列出开放了指定端口的主机列表:nmap -sT -p [port] -oG [ip] | grep open
    5.在某段子网上查找未占用的 IP :nmap -T4 -sP 192.168.2.0/24 && egrep “00:00:00:00:00:00″ /proc/net/arp #有待验证
    6.使用诱饵扫描方法来扫描主机端口:sudo nmap -sS [目标主机] -D [诱饵主机]
+   7.nmap –sS –sV –Pn [ip] 扫描网段下的存活主机并获取开放端口和系统版本
+   -sS 是半开放扫描，比普通扫描要快
+   -sV是版本检测
+   -Pn是不对目标主机进行存活性判断，直接扫描
 监视第一个网络接口上所有流过的数据包:tcpdump
 监视某个主机收到和发出的数据包:tcpdump host [ip]
 截获主机发送的所有数据:tcpdump -i eth0 src host [ip]
