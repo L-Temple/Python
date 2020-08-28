@@ -1,0 +1,57 @@
+nc是一个功能强大的网络调试和探测工具，能够建立几乎所有类型的网络连接。
+该软件在linux里面是默认安装
+使用格式: nc [-参数] 主机名 端口[s] [端口] …
+侦听入站: nc -l -p 端口[-参数] [主机名] [端口]
+参数选项:
+-c shell commands as `-e’; use /bin/sh to exec [dangerous!!]
+-e filename program to exec after connect [dangerous!!]
+-b 是否允许广播
+-g gateway 源路由跳点[s], up to 8
+-G num 源路由指针: 4, 8, 12, …
+-h this cruft
+-i secs 线路延时间隔, 端口扫描
+-k set keepalive option on socket
+-l 监听模式, 入站链接
+-n 只使用 IP 地址不通过 DNS解析
+-o file 使用十六进制
+-p port 本地端口号
+-r 跟随本地和端口
+-q secs quit after EOF on stdin and delay of secs
+-s addr 本地源地址
+-T tos set Type Of Service
+-t 使用telnet连接
+-u UDP 模式
+-v verbose [use twice to be more verbose]
+-w secs 连接目标网络超时时间
+-C Send CRLF as line-ending
+-z zero-I/O mode [used for scanning]
+端口号可以是一个或者是一段: lo-hi [inclusive];
+在端口名称处必须使用反斜杠 (e.g. ‘ftp\-data’).
+nc 192.168.1.37 4444 监听并使用对方主机发送过来的请求
+配合远程缓冲区执行能通过反弹回来的shellcode代码获取对方主机的权限
+渗透过程中取得shell后可以通过nc来快速建立连接
+
+1.TCP/UDP连接测试
+Server
+$nc -l -p 1567
+netcat 命令在1567端口启动了一个tcp 服务器，
+所有的标准输出和输入会输出到该端口。输出和输入都在此shell中展示。
+Client
+$nc 172.31.100.7 1567
+不管你在机器B上键入什么都会出现在机器A上。
+2.端口扫描
+端口扫描经常被系统管理员和黑客用来发现在一些机器上开放的端口，
+帮助他们识别系统中的漏洞。
+$nc -z -v -n 172.31.100.7 21-25
+可以运行在TCP或者UDP模式，默认是TCP，-u参数调整为udp.
+z 参数告诉netcat使用0 IO,连接成功后立即关闭连接， 不进行数据交换
+v 参数指使用冗余选项（即详细输出）
+n 参数告诉netcat 不要使用DNS反向查询IP地址的域名
+这个命令会打印21到25 所有开放的端口。Banner是一个文本，
+Banner是一个你连接的服务发送给你的文本信息。
+当你试图鉴别漏洞或者服务的类型和版本的时候，
+Banner信息是非常有用的。但是，并不是所有的服务都会发送banner。
+一旦你发现开放的端口，你可以容易的使用netcat 连接服务抓取他们的banner。
+$ nc -v 172.31.100.7 21
+netcat 命令会连接开放端口21并且打印运行在这个端口上服务的banner信息。
+1.56 68

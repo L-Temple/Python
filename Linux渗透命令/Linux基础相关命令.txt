@@ -25,6 +25,8 @@ linux渗透方式
   2、种植木马，利用木马开辟的后门进入主机。
   3、采用数据溢出的手段，迫使主机提供后门进入主机。
   4、利用某些软件设计的漏洞，直接或间接控制主机。
+  5、通过系统漏洞，使用相应补丁来控制没打补丁的主机。
+  6、通过主机web服务来进行web入侵相关操作（xss sql注入 文件包含 文件上传）
 网络扫描和嗅探:nmap -[指令] [ip]
   1.常用"nmap -sP [ip]"指令快速查询网段下的存活主机 例:nmap -sP 192.168.1.1-254或nmap -sP 192.168.1.0/24
   2.也可以用"nmap [指定一个ip]"来获取该主机端口开放情况
@@ -42,7 +44,53 @@ linux渗透方式
    -sS 是半开放扫描，比普通扫描要快
    -sV是版本检测
    -Pn是不对目标主机进行存活性判断，直接扫描
-监视第一个网络接口上所有流过的数据包:tcpdump
-监视某个主机收到和发出的数据包:tcpdump host [ip]
-截获主机发送的所有数据:tcpdump -i eth0 src host [ip]
-windows查询端口占用应用PID:netstat -aon|findstr :80|findstr LISTEN
+tar 解压缩：
+    tar -xvf /home/a.tar //打开tar打包文件
+    tar -zxvf /home/a.tar.gz //解压以gzip压缩的文件
+    tar -jxvf /home/a.tar.bz2 //解压以bzip压缩的文件
+    tar -cvf /home/a.tar /home 打包/home下所有文件
+tcpdump：
+    和它类似的工具在windows中是wireshark，其采用底层库winpcap/libpcap实现。采用了bpf过滤机制。
+参数名 含义
+    -n 使用IP地址表示主机。使用数字表示端口
+    -c 仅仅抓取指定数量的数据包
+    -i 指定要监听的端口。如果为"-i any"表示住区所有网卡数据包
+    -v 输出诸如ip数据包中的TTL更加详细的信息
+    -e 显示以太网帧头部信息
+    -x 按照十六进制显示数据包内容
+    -X 不仅仅输出-x结果还输出十六进制对应的ASCII字符
+    -r 从文件读取数据包并显示
+实际操作：
+    监视第一个网络接口上所有流过的数据包:tcpdump
+    监视某个主机收到和发出的数据包:tcpdump host [ip]
+    截获主机发送的所有数据:tcpdump -i eth0 src host [ip]
+    windows查询端口占用应用PID:netstat -aon|findstr :80|findstr LISTEN
+　　捕获特定网口数据包 tcpdump -i eth0
+　　指定捕获包的协议类型 tcpdump -i eth0 arp
+　　捕获指定端口 tcpdump -i eth0 post [端口]
+　　捕获特定目标ip+port的包 tcpdump -i eth0 dst [ip] and port [端口]
+netstat：
+　　netstat是一个网络信息统计工具。它可以得到网卡接口上全部了解，路由表信息，网卡接口信息等。
+    通常在网络编程中我们用它来显示TCP连接以及状态信息。
+参数 描述
+　　-n 使用IP地址表示主机
+　　-a 显示结果中包含监听的socket
+　　-t 仅显示TCP连接
+　　-r 显示路由信息
+　　-i 显示网卡接口数据流量
+　　-o 显示socket定时器的信息
+　　-p 显示socket所属的进程的PID和名字
+实际操作：
+　　列出所有连接 netstat -a
+　　只列出TCP或者UDP netstat -at/netstat -au
+　　列出监听中的连接 netstat -tnl
+　　获取进程名、进程号以及用户 ID nestat -nlpt
+　　netstat持续输出 netstat -ct
+　　打印active状态的连接 netstat -atnp | grep ESTA
+　　查看服务是否运行(npt) netstat -aple| grep ntp
+cd命令
+    这是一个非常基本，也是大家经常需要使用的命令，它用于切换当前目录，
+    它的参数是要切换到的目录的路径，可以是绝对路径，也可以是相对路径。如：
+    cd /root/Docements # 切换到目录/root/Docements
+    cd ./path          # 切换到当前目录下的path目录中，“.”表示当前目录
+    cd ../path         # 切换到上层目录中的path目录中，“..”表示上一层目录
