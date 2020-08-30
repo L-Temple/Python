@@ -1,0 +1,22 @@
+# install dependencies
+在命令行输入以下内容：{
+sudo apt-get install       \
+    cmake                  \
+    build-essential        \
+    libboost-dev           \
+    libqt5xmlpatterns5-dev \
+    qtbase5-dev            \
+    qt5-default            \
+    libqt5svg5-dev         \
+    libgraphviz-dev        \
+    libcapstone-dev
+}
+# build and run edb
+依次输入下面内容：
+git clone --recursive https://github.com/eteran/edb-debugger.git
+cd edb-debugger
+mkdir build
+cd build
+cmake ..
+make
+./edb
