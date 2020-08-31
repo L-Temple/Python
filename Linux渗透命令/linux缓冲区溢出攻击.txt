@@ -31,7 +31,7 @@ shellcode：一小段用汇编语言编写的机器码。可以用Metasploit框�
 
 实例操作：
 运行服务端程序
-通过nststat -pantu 命令来获取该服务开放的端口和进程PID
+通过netstat -pantu 命令来获取该服务开放的端口和进程PID
 运行edb对进程进行检测
 运行第一个测试程序：
 import socket
