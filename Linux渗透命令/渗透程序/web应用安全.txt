@@ -1,0 +1,25 @@
+一.CSRF（跨站请求伪造）
+CSRF的两个特点：
+CSRF（通常）发生在第三方域名。
+CSRF攻击者不能获取到Cookie等信息，只是使用。
+CSRF防御方法（根据DVWA的密码修改类型的测试网站总结出的防御方法，其他网站的csrf第三部防御方法会不相同）
+1.对用户请求头的中的Referer字段进行验证
+if( stripos( $_SERVER[ 'HTTP_REFERER' ] ,$_SERVER[ 'SERVER_NAME' ]) !== false )
+入侵方法通过burpsuite进行抓包，把抓取到的包中自己加一个Referer字段，
+然后值只要设置成包含了主机头127.0.0.1就行了
+2.token检测法
+csrf依赖于浏览器该问链接时自动对应网站的cookie带上，token不放cookie
+（一般form表单加个hidden属性的input标签来存放）csrf就没法获取token，
+这样我们就可以通过检测发送过来的数据包中是否有正确的token值来决定是否响应请求。
+checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
+获取用户的 token修改密码的话，就得和XSS漏洞一起结合实现了，将存储型xss插入到数据库中会弹出token。
+3.加入输入原密码才能修改密码的验证，实现完美防御CSRF攻击。
+二.命令注入（Command Injection）
+命令注入防御方法（根据DVWA的命令注入测试网站总结出的防御方法）
+成功目标是输入192.168.0.1 && net user字符串
+1.添加对字符的过滤对”&&”和”;”进行了过滤
+输入192.168.0.1 &;& net view和192.168.0.1 & dir能成功注入
+2.添加更多字符的过滤对许多敏感符号（”&”、”;”、”||”等）进行了过滤
+根据过滤的字符中发现的没有过滤完全的字符编写注入字符串能成功注入
+3.针对每个点进行拆分分成四段再组合起来，难以入侵
+三.文件包含（File Inclusion）
