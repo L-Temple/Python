@@ -3,6 +3,9 @@ CSRF的两个特点：
 CSRF（通常）发生在第三方域名。
 CSRF攻击者不能获取到Cookie等信息，只是使用。
 CSRF防御方法（根据DVWA的密码修改类型的测试网站总结出的防御方法，其他网站的csrf第三部防御方法会不相同）
+该题目要求更改密码输入新的密码并且再次输入新的密码
+http://192.168.153.130/dvwa/vulnerabilities/csrf/?password_new=password&password_conf=password&Change=Change#
+服务器用户访问这个链接会被更改密码为password
 1.对用户请求头的中的Referer字段进行验证
 if( stripos( $_SERVER[ 'HTTP_REFERER' ] ,$_SERVER[ 'SERVER_NAME' ]) !== false )
 入侵方法通过burpsuite进行抓包，把抓取到的包中自己加一个Referer字段，
@@ -16,6 +19,8 @@ checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php'
 3.加入输入原密码才能修改密码的验证，实现完美防御CSRF攻击。
 二.命令注入（Command Injection）
 命令注入防御方法（根据DVWA的命令注入测试网站总结出的防御方法）
+该题目要求在文本框里输入ip地址但是没有做任何过滤可以通过&&
+（window和linux系统都可以用&&来执行多条命令）的方法来执行其他命令
 成功目标是输入192.168.0.1 && net user字符串
 1.添加对字符的过滤对”&&”和”;”进行了过滤
 输入192.168.0.1 &;& net view和192.168.0.1 & dir能成功注入
