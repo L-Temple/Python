@@ -49,6 +49,6 @@ if __name__ == '__main__':
     ping_all(my_ip())
     for ip in IPList:
         print(ip)
-        scan_all_port(ip, 8100)
+        scan_all_port(ip, 100)
     for port in PortList:
         print(port)
