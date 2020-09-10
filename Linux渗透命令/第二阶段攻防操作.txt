@@ -1,0 +1,42 @@
+第一阶段
+ftp 下载一个密码表
+传输到linux攻击机中，放在root目录下面
+第二阶段防御
+登陆到自己的靶机
+使用攻击机nmap 靶机ip 来获得靶机上开放的漏洞和端口
+
+第二阶段攻击
+1、没有给出靶机密码
+打开msf
+use auxiliary/scanner/ssh/ssh_login
+show opyion 查看所需的字段
+设置目标靶机的ip
+设置要登录的用户名
+设置密码词典
+输入run 或者 exploit 启动脚本
+暴力破解成功后会停止脚本
+使用sessions -i查看破解结果
+输入sessions -i 1 来使用第一个获得到的结果
+输入pwd查看个人权限
+输入ls查看root目录下面的文件
+使用cat flag.txt来查看flag值
+修改对方靶机密码 
+输入passwd 修改当前用户密码  输入passwd 用户名 修改该用户名密码
+输入新密码：lanzihuan406
+
+# /root
+~ 根目录
+                 192.168.1.100
+网段区分     A    B   C  D
+2、已知靶机密码
+先登录到自己靶机地址
+判断其他靶机的ip地址
+使用 nmap -sP 192.168.1-254.自己靶机D段ip
+尝试登陆不同C网段下D段相同的ip
+ssh 对方靶机ip
+输入已知的密码
+输入ls查看root目录下面的文件
+使用cat flag.txt来查看flag值
+修改对方靶机密码 
+输入passwd 修改当前用户密码  输入passwd 用户名 修改该用户名密码
+输入新密码
