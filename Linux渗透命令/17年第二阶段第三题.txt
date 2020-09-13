@@ -1,0 +1,51 @@
+题目：
+任务描述：
+
+现欲对该系统中主机进行ARP扫描渗透测试，确认该系统中都有哪些IP主机在线.
+
+1.进入虚拟机操作系统：Ubuntu Linux 32bit中的/root目录，完善该目录下的arp_sweep.py文件，填写该文件当中空缺的Flag1字符串，将该字符串作为Flag值（形式：Flag1字符串）提交；（arp_sweep.py脚本功能见该任务第6题）
+
+2.进入虚拟机操作系统：Ubuntu Linux 32bit中的/root目录，完善该目录下的arp_sweep.py文件，填写该文件当中空缺的Flag2字符串，将该字符串作为Flag值（形式：Flag2字符串）提交；（arp_sweep.py脚本功能见该任务第6题）
+
+3.进入虚拟机操作系统：Ubuntu Linux 32bit中的/root目录，完善该目录下的arp_sweep.py文件，填写该文件当中空缺的Flag3字符串，将该字符串作为Flag值（形式：Flag3字符串）提交；（arp_sweep.py脚本功能见该任务第6题）
+
+4.进入虚拟机操作系统：Ubuntu Linux 32bit中的/root目录，完善该目录下的arp_sweep.py文件，填写该文件当中空缺的Flag4字符串，将该字符串作为Flag值（形式：Flag4字符串）提交；（arp_sweep.py脚本功能见该任务第6题）
+
+5.进入虚拟机操作系统：Ubuntu Linux 32bit中的/root目录，完善该目录下的arp_sweep.py文件，填写该文件当中空缺的Flag5字符串，将该字符串作为Flag值（形式：Flag5字符串）提交；（arp_sweep.py脚本功能见该任务第6题）
+
+6.在虚拟机操作系统：Ubuntu Linux 32bit下执行arp_sweep.py文件，对服务器场景进行ARP扫描渗透测试；将该文件执行后的显示结果中，第1行的第1个字符以及第2行的第1个字符作为Flag值（形式：第1行的第1个字符;第2行的第1个字符）提交；
+
+所提供的py文件：
+from scapy.all import *
+import optparse
+from threading import *
+
+def sweep(packet):
+    try:
+        reply = srp1(packet,timeout = 1,verbose = 0,iface = 'eth0')
+        print 'IP:' + reply.psrc + 'Mac:' + reply.hwsrc
+    except:
+        pass
+
+def main():
+    parser = optparse.OptionParser('usage')
+    parser.add_optiob('-H',dest='tgHost',type='string',help='')
+    (options,args) = parser.parse_args()
+    host = options.tgtHost
+    if host == None:
+        print parser.usage
+        exit(0)
+    eth = Ether()
+    eth.dst = 'ff:ff:ff:ff:ff:ff:ff:ff'
+    eth.type = 0x0806
+    arp = ARP()
+    for n in range(1,254):
+    arp.
+
+答案:
+Flag1 = F1.F2.F3=scapy.optparse.threading
+Flag2 = F4.F5.F6=sweep.psrc.hwsrc
+Flag3 = F7.F8.F9=parser.options.host
+Flag4 = F10.F11.F12=Ether.dst.type
+Flag5=F13.F14.F15=pdst.packet.t
+W;l
