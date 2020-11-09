@@ -19,11 +19,11 @@ sheet.write(0, 3, '观看次数')
 sheet.write(0, 4, '弹幕数')
 sheet.write(0, 5, '发布时间')
 n=1
-db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='asd', port=3306, charset='utf8')
-cursor = db.cursor()
+#db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='asd', port=3306, charset='utf8')
+#cursor = db.cursor()
 t=1
 zhcn = """alter table red convert to character set utf8;"""
-cursor.execute(zhcn)
+#cursor.execute(zhcn)
 def search():
     try:
         print('开始访问b站....')
@@ -71,10 +71,10 @@ def save_to_excel(soup):
         sheet.write(n, 4, item_biubiu)
         sheet.write(n, 5, item_date)
         n = n + 1
-        sql = "INSERT INTO red(id ,item_title,item_link,item_dec,item_view,item_biubiu,item_date) VALUES(null ,'{}','{}','{}','{}','{}','{}')"
-        sql2 = sql.format((item_title),(item_link),(item_dec),(item_view),(item_biubiu),(item_date))
-        cursor.execute(sql2)
-        db.commit()
+        #sql = "INSERT INTO red(id ,item_title,item_link,item_dec,item_view,item_biubiu,item_date) VALUES(null ,'{}','{}','{}','{}','{}','{}')"
+        #sql2 = sql.format((item_title),(item_link),(item_dec),(item_view),(item_biubiu),(item_date))
+        #cursor.execute(sql2)
+        #db.commit()
 def get_source():
     WAIT.until(EC.presence_of_element_located((By.CSS_SELECTOR,'#server-search-app > div.contain > div.body-contain > div > div.flow-loader> div.mixin-list> ul')))
     html = browser.page_source
@@ -95,5 +95,5 @@ def main():
         browser.close()
 if __name__ == '__main__':
     main()
-    db.close()
+    #db.close()
     book.save(u'1.xls')
