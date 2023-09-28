@@ -18,7 +18,7 @@ sheet.write(0, 2, '描述')
 sheet.write(0, 3, '观看次数')
 sheet.write(0, 4, '弹幕数')
 sheet.write(0, 5, '发布时间')
-n=1
+n = 1
 #db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='asd', port=3306, charset='utf8')
 #cursor = db.cursor()
 t=1
