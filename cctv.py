@@ -8,7 +8,7 @@ book = xlwt.Workbook(encoding='utf-8',style_compression=0)
 sheet = book.add_sheet('1',cell_overwrite_ok=True)
 sheet.write(0, 0, '标题')
 sheet.write(0, 1, '地址')
-n=1
+n = 1
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
 def video_url(day): #获取当日的所有链接并返回
     mainURL = 'http://tv.cctv.com/lm/wjxw/day/{}.shtml'
