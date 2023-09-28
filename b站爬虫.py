@@ -21,7 +21,7 @@ sheet.write(0, 5, '发布时间')
 n = 1
 #db = pymysql.connect(host='127.0.0.1', user='root', password='root', db='asd', port=3306, charset='utf8')
 #cursor = db.cursor()
-t=1
+t = 1
 zhcn = """alter table red convert to character set utf8;"""
 #cursor.execute(zhcn)
 def search():
