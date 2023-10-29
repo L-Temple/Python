@@ -2,6 +2,12 @@
 #1. 导入必要的模块和库：
 import os
 import yaml
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+#1. 创建一个WebDriver对象，并设置Chrome浏览器的选项：
+options = Options()
+options.add_argument("--headless")  # 无界面模式
+driver = webdriver.Chrome(options=options)
 #1. 获取登录后的Cookie：
 cookie = driver.get_cookies()
 #1. 定义保存Cookie的文件路径和文件名：
