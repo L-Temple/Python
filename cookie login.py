@@ -13,7 +13,7 @@ import chardet
 import selenium
 import xlwt
 import pymysql
-driver = r"C:\...."
+driver = r"C:\...."  #driver驱动路径
 browser = webdriver.Chrome(executable_path=driver)  #driver
 browser.implicitly_wait(10)
 WAIT = WebDriverWait(browser, 10) #定义等待默认超时时间
