@@ -1,0 +1,2 @@
+安装了anconda后设置环境变量的方法，获取anconda的安装目录
+按win+s键输入cmd回车： 输入 path=%path%;anconda的安装目录
