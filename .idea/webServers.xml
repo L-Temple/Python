@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="787a1f0d-f007-42bf-a3fa-66a4a45af0c1" name="raspi">
+        <fileTransfer rootFolder="/home/temple" accessType="SFTP" host="192.168.137.91" port="22" sshConfigId="f5f2e64d-9b8e-40b0-83e2-acd565960668" sshConfig="temple@192.168.137.91:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
