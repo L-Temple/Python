@@ -9,6 +9,20 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="7bc51622-ad94-4640-bdca-a5d14f7bc804" name="raspi1">
+        <fileTransfer rootFolder="/home/raspi1" accessType="SFTP" host="192.168.123.215" port="22" sshConfigId="c39b52f3-4b03-40bc-b865-ffd76231f8d0" sshConfig="raspi1@192.168.123.215:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="8c82b262-a0d7-4dd7-b737-38f395541ec2" name="r-nas">
+        <fileTransfer accessType="SFTP" host="192.168.1.220" port="22" sshConfigId="ee88cd3a-6b50-4c49-b6e7-21b0014c095d" sshConfig="r-nas@192.168.1.220:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="raspi" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="raspi1" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+      <paths name="r-nas">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home" local="$PROJECT_DIR$/../bls-py" web="/" />
+            <mapping local="$PROJECT_DIR$/../作业" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="raspi">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$/../bls-py/RPI 5" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="raspi1">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/Desktop" local="$PROJECT_DIR$/../bls-py" web="/" />
+            <mapping local="$PROJECT_DIR$/../作业" />
           </mappings>
         </serverdata>
       </paths>

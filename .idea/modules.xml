@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Python.iml" filepath="$PROJECT_DIR$/.idea/Python.iml" />
       <module fileurl="file://$PROJECT_DIR$/../bls-py/.idea/bls-py.iml" filepath="$PROJECT_DIR$/../bls-py/.idea/bls-py.iml" />
       <module fileurl="file://$PROJECT_DIR$/../作业/.idea/作业.iml" filepath="$PROJECT_DIR$/../作业/.idea/作业.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../数据集/.idea/数据集.iml" filepath="$PROJECT_DIR$/../数据集/.idea/数据集.iml" />
     </modules>
   </component>
 </project>

@@ -25,9 +25,9 @@ def get_source(html):
     limit_line(soup)
     #weatherALL(soup)
     Time()
-    sql = "INSERT INTO info(id ,Tempurater,Weather,MaxTempurater,MinTempurater,Wind,Limit_line,Datetime) " \
-          "VALUES(null ,'{}','{}','{}','{}','{}','{}','{}')"
-    sql2 = sql.format((Temp(soup)), (weather(soup)), (maxTemp(soup)), (minTemp(soup)), (wind(soup)), (limit_line(soup)), (Time()))
+    # sql = "INSERT INTO info(id ,Tempurater,Weather,MaxTempurater,MinTempurater,Wind,Limit_line,Datetime) " \
+    #       "VALUES(null ,'{}','{}','{}','{}','{}','{}','{}')"
+    # sql2 = sql.format((Temp(soup)), (weather(soup)), (maxTemp(soup)), (minTemp(soup)), (wind(soup)), (limit_line(soup)), (Time()))
     #cursor.execute(sql2)
     #db.commit()
 def Temp(soup):
